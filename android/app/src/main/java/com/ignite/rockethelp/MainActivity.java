@@ -1,4 +1,4 @@
-package com.rockethelp;
+package com.ignite.rockethelp;
 
 import android.os.Build;
 import android.os.Bundle;

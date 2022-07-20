@@ -1,18 +1,21 @@
-import { HStack, Icon, VStack, Text } from "native-base";
-import { Hourglass } from "phosphor-react-native";
+import { useRoute } from "@react-navigation/native";
+import { VStack, Text } from "native-base";
 
 import { Header } from "../components/Header";
 
-export function Details() {
+type RouteParams = {
+  orderId: string;
+};
+
+export const Details = () => {
+  const route = useRoute();
+
+  const { orderId } = route.params as RouteParams;
+
   return (
     <VStack flex={1} bg="gray.700">
-      <Header title="Solicitação" pt={12} />
-      <HStack w="full">
-        <Hourglass size={24} color="gray.200" />
-        <Text color="gray.200" ml={4}>
-          Em andamento
-        </Text>
-      </HStack>
+      <Header title="Solicitação" pt={12} px={6} />
+      <Text color="white">{orderId}</Text>
     </VStack>
   );
-}
+};

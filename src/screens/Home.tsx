@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { Heading, HStack, IconButton, Text, useTheme, VStack, FlatList, Center } from "native-base";
+import { useNavigation } from "@react-navigation/native";
+import {
+  Heading,
+  HStack,
+  IconButton,
+  Text,
+  useTheme,
+  VStack,
+  FlatList,
+  Center,
+} from "native-base";
 import { ChatTeardropText, SignOut } from "phosphor-react-native";
 
 import Logo from "../assets/logo_secondary.svg";
@@ -8,18 +18,29 @@ import { Filter } from "../components/Filter";
 import { Order, OrderProps } from "../components/Order";
 import { Button } from "../components/Button";
 
-export function Home() {
+export const Home = () => {
   const { colors } = useTheme();
+  const navigation = useNavigation();
 
-  const [statusSelected, setStatusSelected] = useState<"open" | "closed">("open");
+  const [statusSelected, setStatusSelected] = useState<"open" | "closed">(
+    "open"
+  );
   const [orders, setOrders] = useState<OrderProps[]>([
     {
-      id: "123",
+      id: "45213",
       patrimony: "79853216",
       when: "18/07/2020 ás 12:00",
       status: "open",
     },
   ]);
+
+  const handleNewOrder = () => {
+    navigation.navigate("new");
+  };
+
+  const handleOpenDetails = (id: string) => {
+    navigation.navigate("details", { orderId: id });
+  };
 
   return (
     <VStack flex={1} pb={6} bg="gray.700">
@@ -38,9 +59,15 @@ export function Home() {
       </HStack>
 
       <VStack flex={1} px={6}>
-        <HStack w="full" mt={8} mb={4} justifyContent="space-between" alignItems="center">
+        <HStack
+          w="full"
+          mt={8}
+          mb={4}
+          justifyContent="space-between"
+          alignItems="center"
+        >
           <Heading color="gray.100">Solicitações</Heading>
-          <Text color="gray.200">2</Text>
+          <Text color="gray.200">{orders.length}</Text>
         </HStack>
 
         <HStack space={3} mb={8}>
@@ -61,7 +88,9 @@ export function Home() {
         <FlatList
           data={orders}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <Order data={{ ...item, status: statusSelected }} />}
+          renderItem={({ item }) => (
+            <Order data={item} onPress={() => handleOpenDetails(item.id)} />
+          )}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 100 }}
           ListEmptyComponent={() => (
@@ -74,7 +103,7 @@ export function Home() {
             </Center>
           )}
         />
-        <Button title="Nova solicitação" />
+        <Button title="Nova solicitação" onPress={handleNewOrder} />
       </VStack>
     </VStack>
   );
